@@ -1,12 +1,13 @@
 # modulo_6_practica_1
 
-## Project setup
+## 1. Instalar dependencias
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### 2. Ejecutar JSON Server y VUE
 ```
+json-server --watch db.json
 npm run serve
 ```
 

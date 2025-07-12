@@ -1,0 +1,5 @@
+Practica 1 Vue3
+DIPLOMANTES:
+- Javier Cristian Soria Arias (javisoar.2002@gmail.com)
+- Roxemberg Gomez Maixer (gomez.roxemberg.753@gmail.com)
+- Miguel Angel Huanca Torrez (mianht.sys@gmail.com)

@@ -1,18 +1,50 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <h1>Gestión de Contactos</h1>
+    <ContactFormComponent
+      :editContact="editContact"
+      @refresh-data="fetchContacts"
+      @clear-edit="editContact = null"
+    />
+    <ContactListComponent
+      :contacts="contacts"
+      @refresh-data="fetchContacts"
+      @edit-contact="editContact = $event"
+    />
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import axios from 'axios'
+import ContactFormComponent from '../components/ContactFormComponent.vue'
+import ContactListComponent from '../components/ContactListComponent.vue'
 
 export default {
-  name: 'HomeView',
   components: {
-    HelloWorld
+    ContactFormComponent,
+    ContactListComponent
+  },
+  data() {
+    return {
+      contacts: [],
+      editContact: null
+    }
+  },
+  created() {
+    this.fetchContacts()
+  },
+  methods: {
+    // Método para obtener la lista de contactos desde la API de JSON Server mediante Axios
+    async fetchContacts() {
+      const response = await axios.get('http://localhost:3000/contactos')
+      this.contacts = response.data
+    }
   }
 }
 </script>
+
+<style scoped>
+h1 {
+  text-align: center;
+}
+</style>
