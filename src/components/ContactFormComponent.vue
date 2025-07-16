@@ -2,12 +2,18 @@
   <div>
     <h2>{{ contact.id ? 'Editar Contacto' : 'Agregar Contacto' }}</h2>
     <form @submit.prevent="submitForm">
-      <input v-model="contact.name" placeholder="Nombre" required />
-      <input v-model="contact.email" placeholder="Email" required />
-      <input v-model="contact.address" placeholder="Dirección" />
-      <input v-model="contact.phone" placeholder="Teléfono" />
-      <input v-model="contact.country" placeholder="País" />
-      <input v-model="contact.city" placeholder="Ciudad" />
+      <label for="name"><i class="fas fa-user"></i> Nombre:</label>
+      <input v-model="contact.name" placeholder="Nombre" required id="name"/>
+      <label for="email"><i class="fas fa-envelope"></i> Email:</label>
+      <input v-model="contact.email" placeholder="Email" required id="email"/>
+      <label for="address"><i class="fas fa-location-dot"></i> Dirección:</label>
+      <input v-model="contact.address" placeholder="Dirección" id="address"/>
+      <label for="phone"><i class="fas fa-phone"></i> Teléfono:</label>
+      <input v-model="contact.phone" placeholder="Teléfono" id="phone"/>
+      <label for="country"><i class="fas fa-globe"></i> País:</label>
+      <input v-model="contact.country" placeholder="País" id="country"/>
+      <label for="city"><i class="fas fa-city"></i> Ciudad:</label>
+      <input v-model="contact.city" placeholder="Ciudad" id="city"/>
       <button type="submit">
         <i :class="contact.id ? 'fas fa-save' : 'fas fa-plus'"></i>
         {{ contact.id ? 'Actualizar' : 'Agregar' }}
@@ -103,5 +109,11 @@ button[type="submit"] {
 button[type="button"] {
   background-color: #e5e7eb;
   color: #111827;
+}
+
+label {
+  font-weight: bold;
+  margin-top: 10px;
+  display: block;
 }
 </style>

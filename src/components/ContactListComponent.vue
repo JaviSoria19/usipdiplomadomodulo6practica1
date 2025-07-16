@@ -1,15 +1,41 @@
 <template>
   <div>
-    <h2>Lista de Contactos (el ID solo se muestra con fines de desarrollo)</h2>
-    <input v-model="search" placeholder="Escribe aquí para buscar por nombre, email o cualquier otro campo"
+    <h2>Lista de Contactos</h2>
+    <label for="search"><i class="fas fa-search"></i> Búsqueda:</label>
+    <input id="search" v-model="search" placeholder="Escribe aquí para buscar por nombre, email o cualquier otro campo"
       class="input" />
+
+    <h3><i class="fas fa-filter"></i> Filtros:</h3>
+    <div class="filters">
+      <label><i class="fas fa-user"></i> Nombre:</label>
+      <input v-model="filters.name" placeholder="Filtrar por nombre"/>
+
+      <label><i class="fas fa-envelope"></i>Email:</label>
+      <input v-model="filters.email" placeholder="Filtrar por email"/>
+
+      <label><i class="fas fa-location-dot"></i> Dirección:</label>
+      <input v-model="filters.address" placeholder="Filtrar por dirección" />
+
+      <label><i class="fas fa-phone"></i> Teléfono:</label>
+      <input v-model="filters.phone" placeholder="Filtrar por teléfono" />
+
+      <label><i class="fas fa-globe"></i> País:</label>
+      <input v-model="filters.country" placeholder="Filtrar por país" />
+
+      <label><i class="fas fa-city"></i> Ciudad:</label>
+      <input v-model="filters.city" placeholder="Filtrar por ciudad" />
+    </div>
+
     <ul>
       <li v-for="contact in filteredContacts" :key="contact.id">
-        <span>{{ contact.id }} <i class="fas fa-user"></i></span> <strong>{{ contact.name }}</strong> - <i class="fas fa-envelope"></i> {{ contact.email }}
+        <span>{{ contact.id }} <i class="fas fa-user"></i></span> <strong>{{ contact.name }}</strong> - <i
+          class="fas fa-envelope"></i> {{ contact.email }}
         <br />
+        <i class="fas fa-location-dot"></i> {{ contact.address }}
+        <br>
         <i class="fas fa-phone"></i> {{ contact.phone }}
         <br>
-        <i class="fas fa-location-dot"></i> {{ contact.address }} - <i class="fas fa-city"></i> {{ contact.city }}, <i class="fas fa-globe"></i> {{ contact.country }}
+        <i class="fas fa-globe"></i> {{ contact.country }} <i class="fas fa-city"></i> {{ contact.city }}
         <br />
         <button @click="$emit('edit-contact', contact)">
           <i class="fas fa-pen"></i> Editar
@@ -33,22 +59,38 @@ export default {
   emits: ['refresh-data', 'edit-contact'],
   data() {
     return {
-      search: ''
+      search: '',
+      filters: {
+        name: '',
+        email: '',
+        address: '',
+        phone: '',
+        country: '',
+        city: ''
+      }
     }
-  },
+  }
+  ,
   computed: {
-    // Propiedad computada para filtrar los contactos por cualquier campo
     filteredContacts() {
-      const cadenaDeBusqueda = this.search.toLowerCase().trim()
-      if (!cadenaDeBusqueda) return this.contacts
-
       return this.contacts.filter(contact => {
-        return Object.values(contact).some(value =>
-          String(value).toLowerCase().includes(cadenaDeBusqueda)
-        )
+        // Búsqueda general
+        const searchMatch = this.search
+          ? Object.values(contact).some(value =>
+            String(value).toLowerCase().includes(this.search.toLowerCase())
+          )
+          : true
+
+        // Filtros específicos
+        const fieldFiltersMatch = Object.entries(this.filters).every(([key, value]) => {
+          return value === '' || contact[key].toLowerCase().includes(value.toLowerCase())
+        })
+
+        return searchMatch && fieldFiltersMatch
       })
     }
-  },
+  }
+  ,
   methods: {
     async deleteContact(id) {
       if (confirm('¿Estás seguro de eliminar este contacto?')) {
@@ -64,7 +106,7 @@ export default {
 .input {
   margin-bottom: 16px;
   padding: 10px;
-  width: 98%;
+  width: 86.5%;
   font-size: 14px;
   border: 1px solid #d1d5db;
   border-radius: 6px;
@@ -113,5 +155,25 @@ button:nth-of-type(2) {
 span {
   color: #3b82f6;
   font-weight: bold;
+}
+
+label {
+  font-weight: bold;
+  margin-right: 10px;
+  color: #00c180;
+}
+
+.filters input {
+  margin-bottom: 8px;
+  padding: 8px;
+  width: 98%;
+  font-size: 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+}
+
+.filters label {
+  display: block;
+  margin: 10px;
 }
 </style>
