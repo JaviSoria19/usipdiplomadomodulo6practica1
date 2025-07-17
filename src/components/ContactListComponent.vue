@@ -8,10 +8,10 @@
     <h3><i class="fas fa-filter"></i> Filtros:</h3>
     <div class="filters">
       <label><i class="fas fa-user"></i> Nombre:</label>
-      <input v-model="filters.name" placeholder="Filtrar por nombre"/>
+      <input v-model="filters.name" placeholder="Filtrar por nombre" />
 
       <label><i class="fas fa-envelope"></i>Email:</label>
-      <input v-model="filters.email" placeholder="Filtrar por email"/>
+      <input v-model="filters.email" placeholder="Filtrar por email" />
 
       <label><i class="fas fa-location-dot"></i> Dirección:</label>
       <input v-model="filters.address" placeholder="Filtrar por dirección" />
@@ -93,11 +93,17 @@ export default {
   ,
   methods: {
     async deleteContact(id) {
-      if (confirm('¿Estás seguro de eliminar este contacto?')) {
-        await axios.delete(`http://localhost:3000/contactos/${id}`)
-        this.$emit('refresh-data')
+      try {
+        if (confirm('¿Estás seguro de eliminar este contacto?')) {
+          await axios.delete(`http://localhost:3000/contactos/${id}`)
+          this.$emit('refresh-data')
+        }
+      } catch (error) {
+        console.error(`Error al eliminar el contacto con ID ${id}:`, error)
+        alert('Ocurrió un error al eliminar el contacto.')
       }
     }
+
   }
 }
 </script>

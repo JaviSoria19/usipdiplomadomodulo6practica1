@@ -3,17 +3,17 @@
     <h2>{{ contact.id ? 'Editar Contacto' : 'Agregar Contacto' }}</h2>
     <form @submit.prevent="submitForm">
       <label for="name"><i class="fas fa-user"></i> Nombre:</label>
-      <input v-model="contact.name" placeholder="Nombre" required id="name"/>
+      <input v-model="contact.name" placeholder="Nombre" required id="name" />
       <label for="email"><i class="fas fa-envelope"></i> Email:</label>
-      <input v-model="contact.email" placeholder="Email" required id="email"/>
+      <input v-model="contact.email" placeholder="Email" required id="email" />
       <label for="address"><i class="fas fa-location-dot"></i> Dirección:</label>
-      <input v-model="contact.address" placeholder="Dirección" id="address"/>
+      <input v-model="contact.address" placeholder="Dirección" id="address" />
       <label for="phone"><i class="fas fa-phone"></i> Teléfono:</label>
-      <input v-model="contact.phone" placeholder="Teléfono" id="phone"/>
+      <input v-model="contact.phone" placeholder="Teléfono" id="phone" />
       <label for="country"><i class="fas fa-globe"></i> País:</label>
-      <input v-model="contact.country" placeholder="País" id="country"/>
+      <input v-model="contact.country" placeholder="País" id="country" />
       <label for="city"><i class="fas fa-city"></i> Ciudad:</label>
-      <input v-model="contact.city" placeholder="Ciudad" id="city"/>
+      <input v-model="contact.city" placeholder="Ciudad" id="city" />
       <button type="submit">
         <i :class="contact.id ? 'fas fa-save' : 'fas fa-plus'"></i>
         {{ contact.id ? 'Actualizar' : 'Agregar' }}
@@ -52,15 +52,20 @@ export default {
       }
     },
     async submitForm() {
-      if (this.contact.id) {
-        await axios.put(`http://localhost:3000/contactos/${this.contact.id}`, this.contact) // Si el contacto tiene ID, actualiza
-      } else {
-        await axios.post('http://localhost:3000/contactos', this.contact) // Si no tiene ID, crea un nuevo contacto
+      try {
+        if (this.contact.id) {
+          await axios.put(`http://localhost:3000/contactos/${this.contact.id}`, this.contact)
+        } else {
+          await axios.post('http://localhost:3000/contactos', this.contact)
+        }
+        this.$emit('refresh-data')
+        this.resetForm()
+      } catch (error) {
+        console.error('Error al guardar el contacto:', error)
+        alert('Ocurrió un error al guardar el contacto.')
       }
-      // Finalmente, se refresca la lista de contactos y resetea el formulario
-      this.$emit('refresh-data')
-      this.resetForm()
-    },
+    }
+    ,
     resetForm() {
       // Resetea el formulario a un contacto vacío y emite el evento para limpiar la edición
       this.contact = this.getEmptyContact()
